@@ -1,0 +1,19 @@
+import config.RootConfig;
+import dao.extend.PlaterMapperExtends;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {RootConfig.class})
+public class PlaterTest {
+    @Autowired
+    private PlaterMapperExtends platerMapperExtends;
+
+    @Test
+    public void test1() {
+        System.out.println(platerMapperExtends.booleanPlater(1));
+    }
+}

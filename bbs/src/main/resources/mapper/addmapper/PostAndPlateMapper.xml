@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.PostAndPlateMapper">
+    <sql id="BaseColumn">
+      p.`id` ,
+      `title`,
+      `info`,
+      `publish_time`,
+      `poster_id` as posterId,
+      `if_good` as ifGood,
+      `if_delete`as ifDelete ,
+      p.`plate_id` as plateId,
+      `reply_count`as replyCount,
+      p.`plate_name` as plateName,
+      `nickname` as nickname,
+      `level`
+    </sql>
+    <select id="selectPostAndPlateById" parameterType="int" resultType="PostAndPlate">
+        select
+        <include refid="BaseColumn"/>
+        from Post p
+        left join plate l
+        on p.plate_id = l.id left join user u on p.poster_id=u.id
+        where p.id = ${id}
+    </select>
+
+    <select id="selectAllGoodPost" parameterType="int" resultType="PostAndPlate">
+        select
+        <include refid="BaseColumn"/>
+        from Post p
+        left join plate l
+        on p.plate_id = l.id left join user u on p.poster_id=u.id
+        where p.if_good = 1 limit ${startIndex},${limit}
+    </select>
+
+    <select id="selectAllPostLimit" resultType="PostAndPlate">
+        select
+        <include refid="BaseColumn"/>
+        from Post p
+        inner join plate l
+        on p.plate_id = l.id inner
+        join user u on p.poster_id = u.id where p.if_delete = 0 order by p.id desc
+        limit ${startIndex}, ${limit}
+    </select>
+    <select id="selectPostByKeyWord" resultType="PostAndPlate">
+        select
+          <include refid="BaseColumn"/>
+        from
+          post p
+        left join plate l
+        on p.plate_id = l.id left join user u on p.poster_id=u.id
+        where p.if_good = 1 and p.title like "%${search}%" order by p.id desc
+        limit ${startIndex},${limit}
+    </select>
+</mapper>

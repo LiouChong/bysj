@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.PostMapper">
+  <resultMap id="BaseResultMap" type="model.Post">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
+    <result column="publish_time" jdbcType="TIMESTAMP" property="publishTime" />
+    <result column="poster_id" jdbcType="INTEGER" property="posterId" />
+    <result column="if_good" jdbcType="INTEGER" property="ifGood" />
+    <result column="if_delete" jdbcType="INTEGER" property="ifDelete" />
+    <result column="plate_id" jdbcType="INTEGER" property="plateId" />
+    <result column="plate_name" jdbcType="VARCHAR" property="plateName" />
+    <result column="reply_count" jdbcType="INTEGER" property="replyCount" />
+    <result column="poster_name" jdbcType="VARCHAR" property="posterName" />
+    <result column="poster_picture" jdbcType="VARCHAR" property="posterPicture" />
+    <result column="thumbup_count" jdbcType="INTEGER" property="thumbupCount" />
+    <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, title, info, publish_time, poster_id, if_good, if_delete, plate_id, plate_name, 
+    reply_count, poster_name, poster_picture, thumbup_count, last_modify_time
+  </sql>
+  <select id="selectByExample" parameterType="model.PostExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from post
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from post
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from post
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="model.PostExample">
+    delete from post
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="model.Post">
+    insert into post (id, title, info, 
+      publish_time, poster_id, if_good, 
+      if_delete, plate_id, plate_name, 
+      reply_count, poster_name, poster_picture, 
+      thumbup_count, last_modify_time)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{info,jdbcType=VARCHAR}, 
+      #{publishTime,jdbcType=TIMESTAMP}, #{posterId,jdbcType=INTEGER}, #{ifGood,jdbcType=INTEGER}, 
+      #{ifDelete,jdbcType=INTEGER}, #{plateId,jdbcType=INTEGER}, #{plateName,jdbcType=VARCHAR}, 
+      #{replyCount,jdbcType=INTEGER}, #{posterName,jdbcType=VARCHAR}, #{posterPicture,jdbcType=VARCHAR}, 
+      #{thumbupCount,jdbcType=INTEGER}, #{lastModifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="model.Post">
+    insert into post
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="info != null">
+        info,
+      </if>
+      <if test="publishTime != null">
+        publish_time,
+      </if>
+      <if test="posterId != null">
+        poster_id,
+      </if>
+      <if test="ifGood != null">
+        if_good,
+      </if>
+      <if test="ifDelete != null">
+        if_delete,
+      </if>
+      <if test="plateId != null">
+        plate_id,
+      </if>
+      <if test="plateName != null">
+        plate_name,
+      </if>
+      <if test="replyCount != null">
+        reply_count,
+      </if>
+      <if test="posterName != null">
+        poster_name,
+      </if>
+      <if test="posterPicture != null">
+        poster_picture,
+      </if>
+      <if test="thumbupCount != null">
+        thumbup_count,
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="info != null">
+        #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="publishTime != null">
+        #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="posterId != null">
+        #{posterId,jdbcType=INTEGER},
+      </if>
+      <if test="ifGood != null">
+        #{ifGood,jdbcType=INTEGER},
+      </if>
+      <if test="ifDelete != null">
+        #{ifDelete,jdbcType=INTEGER},
+      </if>
+      <if test="plateId != null">
+        #{plateId,jdbcType=INTEGER},
+      </if>
+      <if test="plateName != null">
+        #{plateName,jdbcType=VARCHAR},
+      </if>
+      <if test="replyCount != null">
+        #{replyCount,jdbcType=INTEGER},
+      </if>
+      <if test="posterName != null">
+        #{posterName,jdbcType=VARCHAR},
+      </if>
+      <if test="posterPicture != null">
+        #{posterPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbupCount != null">
+        #{thumbupCount,jdbcType=INTEGER},
+      </if>
+      <if test="lastModifyTime != null">
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="model.PostExample" resultType="java.lang.Long">
+    select count(*) from post
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update post
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.info != null">
+        info = #{record.info,jdbcType=VARCHAR},
+      </if>
+      <if test="record.publishTime != null">
+        publish_time = #{record.publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.posterId != null">
+        poster_id = #{record.posterId,jdbcType=INTEGER},
+      </if>
+      <if test="record.ifGood != null">
+        if_good = #{record.ifGood,jdbcType=INTEGER},
+      </if>
+      <if test="record.ifDelete != null">
+        if_delete = #{record.ifDelete,jdbcType=INTEGER},
+      </if>
+      <if test="record.plateId != null">
+        plate_id = #{record.plateId,jdbcType=INTEGER},
+      </if>
+      <if test="record.plateName != null">
+        plate_name = #{record.plateName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.replyCount != null">
+        reply_count = #{record.replyCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.posterName != null">
+        poster_name = #{record.posterName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.posterPicture != null">
+        poster_picture = #{record.posterPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thumbupCount != null">
+        thumbup_count = #{record.thumbupCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastModifyTime != null">
+        last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update post
+    set id = #{record.id,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
+      info = #{record.info,jdbcType=VARCHAR},
+      publish_time = #{record.publishTime,jdbcType=TIMESTAMP},
+      poster_id = #{record.posterId,jdbcType=INTEGER},
+      if_good = #{record.ifGood,jdbcType=INTEGER},
+      if_delete = #{record.ifDelete,jdbcType=INTEGER},
+      plate_id = #{record.plateId,jdbcType=INTEGER},
+      plate_name = #{record.plateName,jdbcType=VARCHAR},
+      reply_count = #{record.replyCount,jdbcType=INTEGER},
+      poster_name = #{record.posterName,jdbcType=VARCHAR},
+      poster_picture = #{record.posterPicture,jdbcType=VARCHAR},
+      thumbup_count = #{record.thumbupCount,jdbcType=INTEGER},
+      last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="model.Post">
+    update post
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="info != null">
+        info = #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="publishTime != null">
+        publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="posterId != null">
+        poster_id = #{posterId,jdbcType=INTEGER},
+      </if>
+      <if test="ifGood != null">
+        if_good = #{ifGood,jdbcType=INTEGER},
+      </if>
+      <if test="ifDelete != null">
+        if_delete = #{ifDelete,jdbcType=INTEGER},
+      </if>
+      <if test="plateId != null">
+        plate_id = #{plateId,jdbcType=INTEGER},
+      </if>
+      <if test="plateName != null">
+        plate_name = #{plateName,jdbcType=VARCHAR},
+      </if>
+      <if test="replyCount != null">
+        reply_count = #{replyCount,jdbcType=INTEGER},
+      </if>
+      <if test="posterName != null">
+        poster_name = #{posterName,jdbcType=VARCHAR},
+      </if>
+      <if test="posterPicture != null">
+        poster_picture = #{posterPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbupCount != null">
+        thumbup_count = #{thumbupCount,jdbcType=INTEGER},
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.Post">
+    update post
+    set title = #{title,jdbcType=VARCHAR},
+      info = #{info,jdbcType=VARCHAR},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      poster_id = #{posterId,jdbcType=INTEGER},
+      if_good = #{ifGood,jdbcType=INTEGER},
+      if_delete = #{ifDelete,jdbcType=INTEGER},
+      plate_id = #{plateId,jdbcType=INTEGER},
+      plate_name = #{plateName,jdbcType=VARCHAR},
+      reply_count = #{replyCount,jdbcType=INTEGER},
+      poster_name = #{posterName,jdbcType=VARCHAR},
+      poster_picture = #{posterPicture,jdbcType=VARCHAR},
+      thumbup_count = #{thumbupCount,jdbcType=INTEGER},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

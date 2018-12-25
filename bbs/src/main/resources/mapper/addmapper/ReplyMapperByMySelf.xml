@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.extend.ReplyMapperExtends">
+    <resultMap id="BaseResultMap" type="model.Reply">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="reply_info" jdbcType="VARCHAR" property="replyInfo" />
+        <result column="reply_time" jdbcType="TIMESTAMP" property="replyTime" />
+        <result column="user_id" jdbcType="INTEGER" property="userId" />
+        <result column="post_id" jdbcType="INTEGER" property="postId" />
+        <result column="if_delete" jdbcType="INTEGER" property="ifDelete" />
+    </resultMap>
+    <update id="setDeleteByReplyId" parameterType="int">
+      update reply set if_delete = 1 where id = #{id}
+    </update>
+</mapper>

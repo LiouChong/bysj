@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.extend.PostMapperExtends">
+    <resultMap id="BaseResultMap" type="model.Post">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="info" jdbcType="VARCHAR" property="info" />
+        <result column="time" jdbcType="TIMESTAMP" property="time" />
+        <result column="poster_id" jdbcType="INTEGER" property="posterId" />
+        <result column="if_good" jdbcType="INTEGER" property="ifGood" />
+        <result column="if_delete" jdbcType="INTEGER" property="ifDelete" />
+        <result column="plate_id" jdbcType="INTEGER" property="plateId" />
+        <result column="reply_count" jdbcType="INTEGER" property="replyCount" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, title, info, time, poster_id, if_good, if_delete, plate_id, reply_count
+  </sql>
+
+    <select id="selectGoodPostCount" resultType="int">
+    select count(*) from post where if_good = 1
+  </select>
+    <select id="selectPostCount" resultType="int">
+    select count(*) from post where if_delete = 0
+  </select>
+    <update id="updateByPrimaryKeySelective" parameterType="model.Post">
+        update post
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="info != null">
+                info = #{info,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null">
+                time = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="posterId != null">
+                poster_id = #{posterId,jdbcType=INTEGER},
+            </if>
+            <if test="ifGood != null">
+                if_good = #{ifGood,jdbcType=INTEGER},
+            </if>
+            <if test="ifDelete != null">
+                if_delete = #{ifDelete,jdbcType=INTEGER},
+            </if>
+            <if test="plateId != null">
+                plate_id = #{plateId,jdbcType=INTEGER},
+            </if>
+            <if test="replyCount != null">
+                reply_count = #{replyCount,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="setReplyCountReduce1" parameterType="int" >
+    update post set reply_count = reply_count-1 where id = #{id}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="model.Post">
+    update post
+    set title = #{title,jdbcType=VARCHAR},
+      info = #{info,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP},
+      poster_id = #{posterId,jdbcType=INTEGER},
+      if_good = #{ifGood,jdbcType=INTEGER},
+      if_delete = #{ifDelete,jdbcType=INTEGER},
+      plate_id = #{plateId,jdbcType=INTEGER},
+      reply_count = #{replyCount,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--配置自定义的realm-->
+    <bean id="userRealm" class="realm.UserRealm"/>
+    <bean class="realm.MyFormAuthticationFilter" id="formAuthticationFilter"/>
+    <!--配置安全管理器SecurityManager-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="userRealm"/>
+        <!--<property name="rememberMeManager" ref="rememberMeManager"/>-->
+    </bean>
+
+    <!--配置重定向的路径-->
+    <bean id="systemLogoutFilter" class="realm.SystemLogoutFilter">
+        <property name="redirectUrl" value="/index-2"/>
+    </bean>
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login"/><!--没有登录则跳转到这个URL -->
+        <property name="successUrl" value="/index-2"/>
+        <property name="unauthorizedUrl" value="/index-2"/><!--没有权限就跳转到这个链接-->
+        <!--将自定义登出过滤器注入-->
+        <property name="filters">
+            <map>
+                <entry key="logout" value-ref="systemLogoutFilter"/>
+                <entry key="authc" value-ref="formAuthticationFilter"/>
+            </map>
+        </property>
+
+        <property name="filterChainDefinitions" >
+            <value>
+                / =anon
+                /toIndex = anon
+                /toIndex.jsp=anon
+                /index-2 = anon
+                /index-2.jsp = anon
+                <!--/login.jsp=anon-->
+                /assets/**=anon
+                /js/** = anon
+                /css/** = anon
+                /images/** = anon
+                /favicon.ico = anon
+                /checkName=anon
+                /regist=anon
+                /sendMail=anon
+                <!--/userLogin=anon-->
+                /logout = logout
+                /articles-list = anon
+                /articles-list/** = anon
+                /home-categories-description = anon
+                /faq = anon
+                /contact = anon
+                /searchInfo** = anon
+                /user/** = anon
+                /** = authc
+                <!--/** = authc-->
+                <!--/** = user-->
+            </value>
+        </property>
+    </bean>
+    <!--开启aop,对类代理1-->
+    <aop:config proxy-target-class="true"/>
+    <!--开启shiro注解支持-->
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props >
+                <prop key="org.apache.shiro.authz.UnauthorizedException">redirect:/nopermission.jsp </prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>

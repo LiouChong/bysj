@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.ReplyAndUserMapper">
+    <sql id="BaseColumn">
+      r.`id`,
+      `reply_info` as replyInfo,
+      `reply_time` as replyTime,
+      `user_id` as userId,
+      `post_id` as postId,
+      `picture`,
+      `nickname`
+    </sql>
+    
+    <select id="selectReplyAndUserById" parameterType="int" resultType="ReplyAndUser">
+        select
+        <include refid="BaseColumn"/>
+        from
+        reply r inner join user u
+        on r.user_id = u.id
+        where r.post_id = #{id} and if_delete = 0
+    </select>
+</mapper>

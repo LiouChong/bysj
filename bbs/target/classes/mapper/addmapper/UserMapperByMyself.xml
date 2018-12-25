@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.extend.UserMapperExtends">
+    <resultMap id="BaseResultMap" type="model.User">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+        <result column="psw" jdbcType="VARCHAR" property="psw" />
+        <result column="level" jdbcType="INTEGER" property="level" />
+        <result column="experience" jdbcType="INTEGER" property="experience" />
+        <result column="if_ban" jdbcType="INTEGER" property="ifBan" />
+        <result column="team_id" jdbcType="INTEGER" property="teamId" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="plate_id" jdbcType="INTEGER" property="plateId" />
+        <result column="picture" jdbcType="VARCHAR" property="picture" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, nickname, psw, money , if_ban, team_id, email,picture
+  </sql>
+    <select id="selectByemail" parameterType="String" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from user where email = "${email}"
+    </select>
+    <select id="selectUserPermissionBylevel" parameterType="int" resultType="String">
+    select  p.permission from user u inner join permission p on u.level = p.role_id where u.level = ${level}
+  </select>
+</mapper>

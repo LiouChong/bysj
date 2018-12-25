@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.UserAndPlateMapper">
+    <sql id="BaseColumn">
+          u.`id` ,
+          `nickname`,
+          `psw` ,
+          `level`,
+          `experience`,
+          `if_ban` as ifBan,
+          `team_id` as teamId,
+          `email` ,
+          `plate_id` as plateId,
+          `picture`,
+          `plate_name` as plateName
+    </sql>
+
+    <select id="selectUserAndPlateById" parameterType="int" resultType="UserAndPlate">
+        select <include refid="BaseColumn"/> from user u left join plate p on u.plate_id = p.id where u.id = #{id}
+    </select>
+
+</mapper>
